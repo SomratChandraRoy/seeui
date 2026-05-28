@@ -1,0 +1,36 @@
+{
+	"name": "chroma-studio",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "react-router dev",
+		"build": "react-router build",
+		"preview": "vite preview",
+		"typecheck": "react-router typegen && tsc --noEmit"
+	},
+	"dependencies": {
+		"@react-router/fs-routes": "^7.15.1",
+		"@react-router/node": "^7.15.1",
+		"@react-router/serve": "^7.15.1",
+		"@tanstack/react-query": "^5.72.2",
+		"classnames": "^2.5.1",
+		"isbot": "^5.1.27",
+		"lucide-react": "0.358.0",
+		"react": "^18.2.0",
+		"react-colorful": "^5.6.1",
+		"react-dom": "^18.2.0",
+		"react-router": "^7.6.0"
+	},
+	"devDependencies": {
+		"@react-router/dev": "^7.6.0",
+		"@types/node": "^20",
+		"@types/react": "^18.3.1",
+		"@types/react-dom": "^18.3.1",
+		"autoprefixer": "^10.4.21",
+		"postcss": "^8.5.3",
+		"tailwindcss": "3",
+		"typescript": "^5.8.3",
+		"vite": "^6.3.3",
+		"vite-tsconfig-paths": "^5.1.4"
+	}
+}
