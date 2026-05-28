@@ -553,9 +553,9 @@ export default function ColorBoard({
     : {
         position: "fixed",
         bottom: 20,
-        left: "50%",
+        left: 20,
         top: "auto",
-        transform: "translateX(-50%)",
+        transform: "none",
       };
 
   const accentColor = target === "bg" ? "#60A5FA" : "#F472B6";

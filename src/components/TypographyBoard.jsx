@@ -119,8 +119,9 @@ export default function TypographyBoard({
       }
     : {
         position: "fixed",
-        left: 20,
+        right: 20,
         top: "50%",
+        left: "auto",
         transform: "translateY(-50%)",
       };
 
@@ -143,7 +144,7 @@ export default function TypographyBoard({
           className="typo-pop-in typo-orb-sweep fixed z-[60] flex items-center justify-center overflow-hidden"
           title="Open typography panel"
           style={{
-            left: 20,
+            right: 20,
             top: "50%",
             transform: "translateY(-50%)",
             width: 56,

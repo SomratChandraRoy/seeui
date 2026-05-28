@@ -1,5 +1,5 @@
 
-import { useMemo, useState, useCallback, useRef } from "react";
+import { useMemo, useState, useCallback, useRef, useEffect } from "react";
 import ColorBoard from "../components/ColorBoard";
 import TypographyBoard from "../components/TypographyBoard";
 import FONTS, {
@@ -28,6 +28,15 @@ function getContrastRatio(hex) {
 }
 
 export default function HomePage() {
+  // Mobile detection
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 900);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
   // Random default bg on each load — initialiser runs once per client mount
   const [bgColor, setBgColor] = useState(
     () => RANDOM_DEFAULTS[Math.floor(Math.random() * RANDOM_DEFAULTS.length)],
@@ -135,6 +144,117 @@ export default function HomePage() {
           ? "#F59E0B"
           : "#EF4444";
 
+  // ── Mobile gate overlay ──────────────────────────────────────────────────────
+  if (isMobile) {
+    return (
+      <div
+        style={{
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: 'linear-gradient(135deg, #0F172A 0%, #1E1B4B 50%, #0F172A 100%)',
+          padding: '2rem',
+          fontFamily: "'Inter', system-ui, sans-serif",
+        }}
+      >
+        <div
+          style={{
+            textAlign: 'center',
+            maxWidth: 420,
+            padding: '2.5rem 2rem',
+            borderRadius: 24,
+            background: 'rgba(255,255,255,0.06)',
+            border: '1px solid rgba(255,255,255,0.1)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            boxShadow: '0 24px 80px rgba(0,0,0,0.4)',
+          }}
+        >
+          {/* Icon */}
+          <div
+            style={{
+              width: 72,
+              height: 72,
+              margin: '0 auto 1.5rem',
+              borderRadius: 20,
+              background: 'linear-gradient(135deg, #6366F1, #8B5CF6)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 8px 32px rgba(99,102,241,0.4)',
+            }}
+          >
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FFF" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2" />
+              <line x1="8" y1="21" x2="16" y2="21" />
+              <line x1="12" y1="17" x2="12" y2="21" />
+            </svg>
+          </div>
+
+          <h1
+            style={{
+              fontSize: '1.5rem',
+              fontWeight: 800,
+              color: '#F8FAFC',
+              marginBottom: '0.75rem',
+              lineHeight: 1.2,
+            }}
+          >
+            Open in Desktop Mode
+          </h1>
+
+          <p
+            style={{
+              color: 'rgba(248,250,252,0.6)',
+              fontSize: '0.9375rem',
+              lineHeight: 1.6,
+              marginBottom: '1.5rem',
+            }}
+          >
+            SeeUI is a powerful design tool with draggable panels, color pickers, and typography controls.
+            Switch to <strong style={{ color: '#A5B4FC' }}>desktop mode</strong> to unlock the next level of power.
+          </p>
+
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.75rem',
+              alignItems: 'center',
+            }}
+          >
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 8,
+                padding: '0.625rem 1.5rem',
+                borderRadius: 9999,
+                background: 'linear-gradient(135deg, #6366F1, #818CF8)',
+                color: '#FFF',
+                fontWeight: 700,
+                fontSize: '0.8125rem',
+                boxShadow: '0 4px 20px rgba(99,102,241,0.35)',
+              }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2" />
+                <line x1="8" y1="21" x2="16" y2="21" />
+                <line x1="12" y1="17" x2="12" y2="21" />
+              </svg>
+              Use Desktop for Best Experience
+            </div>
+
+            <span style={{ color: 'rgba(248,250,252,0.35)', fontSize: '0.75rem' }}>
+              Drag panels • Color picker • Font browser
+            </span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       {/* JSON-LD structured data for SEO */}
@@ -144,10 +264,10 @@ export default function HomePage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebApplication",
-            name: "Chroma Studio",
-            url: "https://chromastudio.app",
+            name: "SeeUI",
+            url: "https://seeui.app",
             description:
-              "Pick background colors, text colors, and fonts for your website in real-time. See live WCAG contrast scores, swap 40+ Google Fonts, and upload your logo.",
+              "Stop guessing CSS. Test website background colors, text contrast, and typography instantly. Upload your logo, preview 40+ Google Fonts, check WCAG scores.",
             applicationCategory: "DesignApplication",
             operatingSystem: "Any",
             offers: {
@@ -156,12 +276,14 @@ export default function HomePage() {
               priceCurrency: "USD",
             },
             featureList: [
-              "Live color preview",
-              "WCAG contrast checker",
-              "40+ Google Fonts",
-              "Typography preview",
-              "Logo upload",
-              "HEX, RGB, HSL, CMYK formats",
+              "Live UI color tester",
+              "WCAG contrast checker with image upload",
+              "40+ Google Fonts preview",
+              "CSS typography playground",
+              "Logo color matcher",
+              "HEX, RGB, HSL, CMYK color formats",
+              "Real-time CSS color changer",
+              "Brand color palette generator",
             ],
           }),
         }}
@@ -307,7 +429,7 @@ export default function HomePage() {
                       className="text-sm tracking-tight transition-colors duration-500"
                       style={{ color: textColor, fontFamily, fontWeight: 700 }}
                     >
-                      Chroma Studio
+                      SeeUI
                     </span>
                     <div
                       className="upload-hint flex items-center gap-1 opacity-0 transition-opacity duration-200 ml-1"
@@ -343,7 +465,7 @@ export default function HomePage() {
                   className="text-sm tracking-tight transition-colors duration-500 hidden sm:block"
                   style={{ color: textColor, fontFamily, fontWeight: 700 }}
                 >
-                  Chroma Studio
+                  SeeUI
                 </span>
               )}
             </div>
@@ -504,7 +626,7 @@ export default function HomePage() {
                 fontWeight,
               }}
             >
-              See your brand
+              Stop Guessing CSS.
               <br />
               <span
                 className="italic"
@@ -514,10 +636,10 @@ export default function HomePage() {
                   fontWeight: Math.max(300, fontWeight - 300),
                 }}
               >
-                in every possible
+                Test Backgrounds, Text,
               </span>
               <br />
-              light.
+              and Logos Instantly.
             </h1>
 
             <p
@@ -529,9 +651,9 @@ export default function HomePage() {
                 fontWeight: 400,
               }}
             >
-              Pick any background or text colour, swap fonts on the fly, and
-              upload your logo. Everything previews live — contrast adapts
-              unless you take manual control.
+              Check text contrast, extract logo colors, and preview typography live.
+              Upload your brand logo, swap 40+ Google Fonts, and find the perfect
+              color combination — all in real-time.
             </p>
 
             <div className="fade-up fade-up-4 mt-8 flex flex-wrap items-center gap-3">
@@ -1043,13 +1165,13 @@ export default function HomePage() {
                   className="text-sm font-semibold mb-1 transition-colors duration-500"
                   style={{ color: textColor, fontFamily }}
                 >
-                  Chroma Studio
+                  SeeUI
                 </div>
                 <p
                   className="text-xs transition-colors duration-500"
                   style={{ color: mutedColor, fontFamily }}
                 >
-                  Instantly preview website colors & typography. Free forever.
+                  Live UI Color Tester & Typography Playground. Free forever.
                 </p>
               </div>
               <div className="flex items-center gap-4">
@@ -1057,7 +1179,7 @@ export default function HomePage() {
                   className="text-[10px] transition-colors duration-500"
                   style={{ color: mutedColor, fontFamily }}
                 >
-                  © {new Date().getFullYear()} Chroma Studio
+                  © {new Date().getFullYear()} SeeUI
                 </span>
               </div>
             </div>
