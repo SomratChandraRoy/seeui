@@ -1,5 +1,5 @@
 import { useMemo, useState, useCallback, useRef, useEffect } from "react";
-import { Heart } from "lucide-react";
+import { Heart, Github } from "lucide-react";
 import ColorBoard from "../components/ColorBoard";
 import TypographyBoard from "../components/TypographyBoard";
 import DonateModal from "../components/DonateModal";
@@ -59,7 +59,7 @@ export default function HomePage() {
 
   // UI state
   const [copied, setCopied] = useState(false);
-  const [logoUrl, setLogoUrl] = useState(null);
+  const [logoUrl, setLogoUrl] = useState('/favicon.png');
   const logoInputRef = useRef(null);
 
   // ── Handlers ───────────────────────────────────────────────────────────────
@@ -580,6 +580,23 @@ export default function HomePage() {
                   {textColor.toUpperCase()}
                 </span>
               </div>
+
+              <a
+                href="https://github.com/SomratChandraRoy/seeui"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 hover:scale-110 active:scale-95 ml-1"
+                style={{
+                  backgroundColor: chipBg,
+                  color: textColor,
+                  border: `1px solid ${cardBorder}`,
+                  backdropFilter: "blur(12px)",
+                  WebkitBackdropFilter: "blur(12px)",
+                }}
+                title="View on GitHub"
+              >
+                <Github size={16} />
+              </a>
             </div>
           </nav>
 
