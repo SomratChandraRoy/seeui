@@ -1,0 +1,9 @@
+{
+  "name": "create-checkout",
+  "version": "1.0.0",
+  "description": "Create Stripe checkout session for SeeUI donations",
+  "main": "src/main.js",
+  "dependencies": {
+    "stripe": "^15.0.0"
+  }
+}

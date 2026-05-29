@@ -1,5 +1,7 @@
-import { type RouteConfig, index } from '@react-router/dev/routes';
+import { type RouteConfig, index, route } from '@react-router/dev/routes';
 
 export default [
   index('page.jsx'),
+  route('donate/success', 'donate/success/page.jsx'),
+  route('donate/cancel', 'donate/cancel/page.jsx'),
 ] satisfies RouteConfig;

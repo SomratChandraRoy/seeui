@@ -1,7 +1,8 @@
-
 import { useMemo, useState, useCallback, useRef, useEffect } from "react";
+import { Heart } from "lucide-react";
 import ColorBoard from "../components/ColorBoard";
 import TypographyBoard from "../components/TypographyBoard";
+import DonateModal from "../components/DonateModal";
 import FONTS, {
   DEFAULT_FONT,
   RANDOM_DEFAULTS,
@@ -30,6 +31,7 @@ function getContrastRatio(hex) {
 export default function HomePage() {
   // Mobile detection
   const [isMobile, setIsMobile] = useState(false);
+  const [isDonateOpen, setIsDonateOpen] = useState(false);
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 900);
     check();
@@ -468,6 +470,14 @@ export default function HomePage() {
                   SeeUI
                 </span>
               )}
+
+              <button
+                onClick={() => setIsDonateOpen(true)}
+                className="group ml-2 flex items-center gap-1.5 rounded-full px-3 py-1.5 transition-all duration-300 hover:scale-105 active:scale-95 bg-gradient-to-r from-pink-500/10 to-rose-500/10 hover:from-pink-500/20 hover:to-rose-500/20 ring-1 ring-pink-500/20 shadow-[0_0_15px_rgba(236,72,153,0.15)]"
+              >
+                <Heart size={14} className="text-pink-500 group-hover:fill-pink-500 transition-all duration-300" />
+                <span className="text-[11px] font-bold text-pink-500">Support</span>
+              </button>
             </div>
 
             <div className="flex items-center gap-2 flex-wrap">
@@ -1143,6 +1153,11 @@ export default function HomePage() {
           onTextChange={handleTextChange}
           onResetText={handleResetTextToAuto}
           textIsAuto={textIsAuto}
+        />
+
+        <DonateModal 
+          isOpen={isDonateOpen} 
+          onClose={() => setIsDonateOpen(false)} 
         />
 
         {/* ── Footer ─────────────────────────────────────────────────── */}
