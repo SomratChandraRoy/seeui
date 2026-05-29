@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://seeui.app/sitemap.xml
+Sitemap: https://seeui.bipul.tech/sitemap.xml

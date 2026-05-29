@@ -267,7 +267,7 @@ export default function HomePage() {
             "@context": "https://schema.org",
             "@type": "WebApplication",
             name: "SeeUI",
-            url: "https://seeui.app",
+            url: "https://seeui.bipul.tech",
             description:
               "Stop guessing CSS. Test website background colors, text contrast, and typography instantly. Upload your logo, preview 40+ Google Fonts, check WCAG scores.",
             applicationCategory: "DesignApplication",

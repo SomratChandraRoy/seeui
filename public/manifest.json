@@ -10,7 +10,7 @@
   "categories": ["design", "utilities", "productivity", "developer tools"],
   "icons": [
     {
-      "src": "/favicon.svg",
+      "src": "/favicon.png",
       "type": "image/svg+xml",
       "sizes": "any"
     },
