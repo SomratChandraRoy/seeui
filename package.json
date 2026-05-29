@@ -4,7 +4,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "react-router dev",
-		"build": "react-router build",
+		"build": "react-router build && cp -r build/client dist",
 		"preview": "vite preview",
 		"typecheck": "react-router typegen && tsc --noEmit"
 	},
@@ -13,6 +13,7 @@
 		"@react-router/node": "^7.15.1",
 		"@react-router/serve": "^7.15.1",
 		"@tanstack/react-query": "^5.72.2",
+		"appwrite": "^25.2.0",
 		"canvas-confetti": "^1.9.4",
 		"classnames": "^2.5.1",
 		"clsx": "^2.1.1",

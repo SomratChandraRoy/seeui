@@ -1,38 +1,49 @@
 import Stripe from 'stripe';
 
+/*
+ * Appwrite Cloud Function: create-stripe-session
+ * 
+ * Environment Variables (set in Appwrite Console → Function → Settings → Variables):
+ *   STRIPE_SECRET_KEY  → Your Stripe SECRET key (sk_live_... or sk_test_...)
+ *   CLIENT_URL         → Your website URL (e.g. https://seeui.app)
+ *
+ * Called from frontend via Appwrite SDK: functions.createExecution(...)
+ * Receives: { amount: number } where amount is in DOLLARS (minimum 5)
+ * Returns:  { url: string } — a Stripe Checkout page URL
+ */
 export default async ({ req, res, log, error }) => {
-  // Setup CORS headers
-  const corsHeaders = {
-    'Access-Control-Allow-Origin': process.env.FRONTEND_URL || '*',
+  // ── CORS (needed for browser requests) ────────────────────────────────────
+  const headers = {
+    'Access-Control-Allow-Origin': process.env.CLIENT_URL || '*',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
   };
 
-  // Handle preflight (OPTIONS) request
   if (req.method === 'OPTIONS') {
-    return res.send('', 204, corsHeaders);
+    return res.send('', 204, headers);
   }
 
-  // Ensure it's a POST request
   if (req.method !== 'POST') {
-    return res.json({ error: 'Method not allowed' }, 405, corsHeaders);
+    return res.json({ error: 'Method not allowed' }, 405, headers);
   }
 
   try {
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-      apiVersion: '2023-10-16', // use a pinned version
-    });
-
+    // Parse the request body
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-    const { amount } = body; // amount in cents
+    const amount = Number(body.amount);
 
-    if (!amount || amount < 500) {
-      return res.json({ error: 'Minimum donation amount is $5.00' }, 400, corsHeaders);
+    // ── Validate: minimum $5 ───────────────────────────────────────────────
+    if (!amount || isNaN(amount) || amount < 5) {
+      return res.json(
+        { error: 'Minimum donation amount is $5 USD.' },
+        400,
+        headers
+      );
     }
 
-    const frontendUrl = process.env.FRONTEND_URL || 'https://seeui.app';
+    // ── Create Stripe Checkout Session ──────────────────────────────────────
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-    // Create a Checkout Session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
@@ -41,24 +52,27 @@ export default async ({ req, res, log, error }) => {
             currency: 'usd',
             product_data: {
               name: 'Support SeeUI',
-              description: 'Thank you for supporting the development of SeeUI!',
-              images: [`${frontendUrl}/icon-512.png`],
+              description: 'Thank you for supporting SeeUI development!',
             },
-            unit_amount: amount,
+            unit_amount: Math.round(amount * 100), // Convert dollars → cents
           },
           quantity: 1,
         },
       ],
       mode: 'payment',
-      success_url: `${frontendUrl}/donate/success`,
-      cancel_url: `${frontendUrl}/donate/cancel`,
+      success_url: `${process.env.CLIENT_URL}/donate/success`,
+      cancel_url: `${process.env.CLIENT_URL}/donate/cancel`,
     });
 
-    log(`Created Stripe checkout session for amount: ${amount}`);
+    log(`✅ Created checkout session for $${amount} → ${session.url}`);
 
-    return res.json({ url: session.url }, 200, corsHeaders);
+    return res.json({ url: session.url }, 200, headers);
   } catch (err) {
-    error('Stripe error:', err);
-    return res.json({ error: err.message || 'Internal server error' }, 500, corsHeaders);
+    error(`❌ Stripe error: ${err.message}`);
+    return res.json(
+      { error: 'Failed to create payment session. Please try again.' },
+      500,
+      headers
+    );
   }
 };
